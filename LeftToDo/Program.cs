@@ -9,36 +9,55 @@ namespace LeftToDo
 
         public static List<TaskDate> taskDate = new List<TaskDate>();
         public static List<TaskCheckList> taskCheckList = new List<TaskCheckList>();
+        public static bool StartMenuRun = true;
 
         static void Main(string[] args)
         {
-            while (true)
+            while (StartMenuRun)
             {
                 StartMenu();
             }
         }
 
-
-        void TaskMenu(List<TaskDate> taskDate)
+        static void ListTask(List<TaskCheckList> taskCheckList)
         {
             int count = 0;
-            foreach (TaskDate task in taskDate)
-            {
-                count++;
-                Console.WriteLine($"[{count}]: {task.GetTask()}");
-            }
-        }
-
-        void TaskMenu(List<TaskCheckList> taskCheckList)
-        {
-            int count = 0;
+            Console.WriteLine("\nTaskCheckList");
             foreach (TaskCheckList task in taskCheckList)
             {
+                Console.WriteLine("------------------------------------------------");
+                TaskStatus taskStatus = task.GetTaskStatus();
+                Console.WriteLine($"[{count}]: {task.GetTask()}\t\t Done={taskStatus.done} Todo={taskStatus.todo}");
+                int checkCount = 0;
+                List<CheckListTask> checkListTask = task.GetTaskCheckList();
+
+                foreach (CheckListTask checkTask in checkListTask)
+                {
+                    //Console.WriteLine($"\t[{checkCount}]: {checkTask.GetTask()}\t");
+                    Console.WriteLine($"\t[{checkCount}]: {checkTask.GetTask()}\t Done={taskStatus.done} Todo={taskStatus.todo}");
+                    checkCount++;
+                }
+                Console.WriteLine("------------------------------------------------");
                 count++;
-                Console.WriteLine($"[{count}]: {task.GetTask()}");
             }
 
         }
+
+        static void ListTask(List<TaskDate> taskDate)
+        {
+            int count = 0;
+            Console.WriteLine("\nTaskDate");
+            Console.WriteLine("------------------------------------------------");
+            foreach (TaskDate task in taskDate)
+            {
+
+                TaskStatus taskStatus = task.GetTaskStatus();
+                Console.WriteLine($"[{count}]: {task.GetTask()}\t Last Todo Date={task.GetTaskTodoDate()} Done={taskStatus.done} Todo={taskStatus.todo}");
+
+                count++;
+            }
+        }
+
 
         public static void AddNewTask()
         {
@@ -55,7 +74,7 @@ namespace LeftToDo
                     string taskDateToAdd = Console.ReadLine();
                     string date = DateFormat.CreateDate();
                     TaskDate newTaskDate = new TaskDate();
-                    newTaskDate.CreateTask(date,taskDateToAdd);
+                    newTaskDate.CreateTask(date, taskDateToAdd);
                     taskDate.Add(newTaskDate);
                     Console.Clear();
                     StartMenu();
@@ -65,6 +84,20 @@ namespace LeftToDo
                     string taskToAdd = Console.ReadLine();
                     TaskCheckList newTaskCheckList = new TaskCheckList();
                     newTaskCheckList.CreateTask(taskToAdd);
+                    bool running = true;
+                    while (running)
+                    {
+                        Console.WriteLine("Add checklistitem to task");
+                        string subTask = Console.ReadLine();
+                        newTaskCheckList.AddCheckListTask(subTask);
+                        Console.WriteLine("Enter q to exit or press any other key to enter new task");
+                        string quit = Console.ReadLine();
+                        if (quit == "q")
+                        {
+                            running = false;
+                        }
+                        Console.Clear();
+                    }
                     taskCheckList.Add(newTaskCheckList);
                     Console.Clear();
                     StartMenu();
@@ -112,10 +145,16 @@ namespace LeftToDo
                         AddNewTask();
                         break;
                     case "2":
+                        Console.Clear();
+                        ListTask(taskCheckList);
+                        ListTask(taskDate);
+                        Console.ReadKey();
                         break;
                     case "3":
                         break;
                     case "4":
+                        StartMenuRun = false;
+                        running = false;
                         break;
                     default:
                         Console.WriteLine("Enter a number between 1-4");

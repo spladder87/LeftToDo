@@ -6,26 +6,28 @@ namespace LeftToDo
 {
     public class TaskCheckList : Task
     {
-        private List<CheckListTask> CheckListTasks = new List<CheckListTask>();
+        private List<CheckListTask> checkListTasks = new List<CheckListTask>();
 
         public void AddCheckListTask(CheckListTask checkListTask)
         {
-            CheckListTasks.Add(checkListTask);
+            checkListTasks.Add(checkListTask);
         }
         public void AddCheckListTask(string task)
         {
+            Console.WriteLine($"Adding {task}");
             CheckListTask newCheckListTask = new CheckListTask();
             newCheckListTask.CreateTask(task);
-            CheckListTasks.Add(newCheckListTask);
+            checkListTasks.Add(newCheckListTask);
+
         }
 
         public List<CheckListTask> GetTaskCheckList()
         {
-            return CheckListTasks;
+            return checkListTasks;
         }
         public void ChangeCheckListTask(int index, CheckListTask CheckListTask)
         {
-            CheckListTasks[index] = CheckListTask;
+            checkListTasks[index] = CheckListTask;
         }
 
 
