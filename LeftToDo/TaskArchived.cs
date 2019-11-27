@@ -23,5 +23,11 @@ namespace LeftToDo
             TaskCheckList.Add(taskCheckList);
         }
 
+        public void ListArchiveTask()
+        {
+            Program.ListTask(TaskDate);
+            Program.ListTask(TaskCheckList);
+        }
+
     }
 }

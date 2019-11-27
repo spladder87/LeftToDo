@@ -7,7 +7,7 @@ namespace LeftToDo
     public abstract class Task
     {
         protected string task { get; set; }
-        protected TaskStatus TaskStatus = new TaskStatus();
+        public TaskStatus TaskStatus = new TaskStatus();
 
         public void CreateTask(string task)
         {
